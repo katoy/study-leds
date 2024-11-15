@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Control</title>
+</head>
+<body>
+    <h1>Raspberry Pi LED Control</h1>
+    <p>Current LED state: <strong>{{ led_state }}</strong></p>
+    <p>CPU Temperature: <strong>{{ cpu_temp }} °C</strong></p>
+
+    <form action="/led" method="post">
+        <button type="submit" name="action" value="on">Turn LED ON</button>
+        <button type="submit" name="action" value="off">Turn LED OFF</button>
+    </form>
+</body>
+</html>
+
