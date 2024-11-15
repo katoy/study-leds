@@ -1,0 +1,3 @@
+# すべての config.txt を無視
+**/config.txt
+
