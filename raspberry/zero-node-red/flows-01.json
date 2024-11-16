@@ -1,0 +1,166 @@
+[
+    {
+        "id": "34a3c52be7e2f0d4",
+        "type": "tab",
+        "label": "フロー 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "inject_on",
+        "type": "inject",
+        "z": "34a3c52be7e2f0d4",
+        "name": "Turn LED ON",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "gpio_out"
+            ]
+        ]
+    },
+    {
+        "id": "inject_off",
+        "type": "inject",
+        "z": "34a3c52be7e2f0d4",
+        "name": "Turn LED OFF",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "gpio_out"
+            ]
+        ]
+    },
+    {
+        "id": "gpio_out",
+        "type": "rpi-gpio out",
+        "z": "34a3c52be7e2f0d4",
+        "name": "LED",
+        "pin": "17",
+        "set": true,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 350,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "0033ec4793a62a64",
+        "type": "inject",
+        "z": "34a3c52be7e2f0d4",
+        "name": "LED ON",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "{\"action\": \"on\"}",
+        "payloadType": "json",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "a83c2029da3cb1b6"
+            ]
+        ]
+    },
+    {
+        "id": "6b6451f89fed8aa2",
+        "type": "inject",
+        "z": "34a3c52be7e2f0d4",
+        "name": "LED OFF",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "{\"action\": \"off\"}",
+        "payloadType": "json",
+        "x": 160,
+        "y": 360,
+        "wires": [
+            [
+                "a83c2029da3cb1b6"
+            ]
+        ]
+    },
+    {
+        "id": "a83c2029da3cb1b6",
+        "type": "http request",
+        "z": "34a3c52be7e2f0d4",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.0.215:5000/led",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "32a5d82f9ede1e9a"
+            ]
+        ]
+    },
+    {
+        "id": "32a5d82f9ede1e9a",
+        "type": "debug",
+        "z": "34a3c52be7e2f0d4",
+        "name": "Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 320,
+        "wires": []
+    }
+]

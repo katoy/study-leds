@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +8,43 @@
 </head>
 <body>
     <h1>Raspberry Pi LED Control</h1>
-    <p>Current LED state: <strong>{{ led_state }}</strong></p>
-    <p>CPU Temperature: <strong>{{ cpu_temp }} °C</strong></p>
+    <p>Current LED state: <strong id="led-state">{{ led_state }}</strong></p>
+    <p>CPU Temperature: <strong id="cpu-temp">{{ cpu_temp }} °C</strong></p>
 
-    <form action="/led" method="post">
-        <button type="submit" name="action" value="on">Turn LED ON</button>
-        <button type="submit" name="action" value="off">Turn LED OFF</button>
-    </form>
+    <div>
+        <!-- ボタンで LED の ON/OFF を制御 -->
+        <button onclick="sendAction('on')">Turn LED ON</button>
+        <button onclick="sendAction('off')">Turn LED OFF</button>
+    </div>
+
+    <script>
+        /**
+         * サーバーに JSON リクエストを送信して LED の状態を制御
+         * @param {string} action - 'on' または 'off' を指定
+         */
+        async function sendAction(action) {
+            try {
+                // サーバーにリクエストを送信
+                const response = await fetch('/led', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // JSON リクエストヘッダー
+                    },
+                    body: JSON.stringify({ action: action }) // JSON データ
+                });
+
+                // レスポンスの確認
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('led-state').textContent = data.led_state;
+                } else {
+                    alert('Failed to send request: ' + response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending the request.');
+            }
+        }
+    </script>
 </body>
 </html>
-
