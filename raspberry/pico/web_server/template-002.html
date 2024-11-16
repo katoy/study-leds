@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pico Controller</title>
+    <script>
+        async function toggleLED(state) {
+            const response = await fetch('/api/led', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ state: state })
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Failed to toggle LED");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Pico Controller</h1>
+    <p>Temperature: {temperature} °C</p>
+    <p>LED State: {state}</p>
+    <button onclick="toggleLED('on')">Turn On</button>
+    <button onclick="toggleLED('off')">Turn Off</button>
+</body>
+</html>
+
