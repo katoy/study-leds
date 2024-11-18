@@ -51,5 +51,10 @@ except KeyboardInterrupt:
     pass
 
 finally:
+    led.duty_u16(0)
     led.deinit()
+    led_pin = Pin(LED_PIN, Pin.OUT)  # ピンを手動でLOWに設定
+    led_pin.value(0)     # GPIOピンをLOWに設定してLEDを完全に消灯
+    print("LED turned off and PWM deinitialized.")
+
 
