@@ -1,9 +1,9 @@
 from machine import Pin, Timer
 import time
 
-# GPIOピンに接続されたLEDの設定（例: GPIO 17 と GPIO 27）
-led1 = Pin(17, Pin.OUT)  # 1つ目のLED
-led2 = Pin(16, Pin.OUT)  # 2つ目のLED
+# GPIO ピンに接続されたLEDの設定（例: GPIO 17 と GPIO 16）
+led1 = Pin(17, Pin.OUT)  # 1つ目の LED
+led2 = Pin(16, Pin.OUT)  # 2つ目の LED
 
 # タイマーの設定
 timer1 = Timer()

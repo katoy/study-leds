@@ -1,15 +1,12 @@
-// See
-// https://github.com/cfreshman/pico-bootsel/tree/master
+# See
+# https://github.com/cfreshman/pico-bootsel/tree/master
 
 import bootsel, time, machine
 
-
-led = machine.Pin('LED', machine.Pin.OUT)
-led.value(1)
 while True:
   if bootsel.pressed():
-    led.value(0 if led.value() else 1)
-    print('BOOTSEL pressed, LED', 'on' if led.value() else 'off')
+    print('BOOTSEL pressed')
     while bootsel.pressed():
       time.sleep(.1)
+    print('BOOTSEL released')
   time.sleep(.1)
