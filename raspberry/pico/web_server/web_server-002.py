@@ -52,7 +52,9 @@ def load_template():
         with open('template-002.html', 'r') as file:
             return file.read()
     except Exception as e:
-        print(f"Error loading template.html: {e}")
+        print(f"Error loading template-002.html: {e}")
+        wlan = network.WLAN(network.STA_IF)
+        wlan.active(False)
         machine.reset()
 
 def get_led_state():

@@ -51,7 +51,9 @@ def load_template():
         with open('template-001.html', 'r') as file:
             return file.read()
     except Exception as e:
-        print(f"Error loading template.html: {e}")
+        print(f"Error loading template-001.html: {e}")
+        wlan = network.WLAN(network.STA_IF)
+        wlan.active(False)
         machine.reset()
 
 def load_favicon():

@@ -11,13 +11,4 @@ time.sleep(1)
 # pico 本体の LED を消灯します
 led.off()
 
-# pico GPIO 17 の LED を点灯します
-led = LED(17)
-led.on()
-time.sleep(1)
-led.off()
 
-led = LED(25)  # GPIO 25 は内蔵 LED
-led.on()
-time.sleep(1)
-led.off()
