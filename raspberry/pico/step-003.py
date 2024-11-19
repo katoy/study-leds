@@ -39,6 +39,7 @@ interval = 60 / bpm                # BPM から 1 拍あたりの間隔 (秒) �
 
 # 内蔵 LED の設定(GPIO 25)
 led = machine.Pin(25, machine.Pin.OUT)
+# led = machine.Pin('LED', machine.Pin.OUT)
 
 print(f"BPM: {bpm}")               # bpm を表示
 # メインループ: メトロノーム動作

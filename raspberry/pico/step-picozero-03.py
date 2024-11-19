@@ -19,6 +19,7 @@
 # - デバウンス処理で安定したボタン入力
 
 from picozero import LED
+from picozero import pico_led
 import time
 import bootsel
 
@@ -34,8 +35,8 @@ def show_change_bmp(bpm):
 bpm = 60                           # 初期 BPM を 60 に設定
 interval = 60 / bpm                # BPM から 1 拍あたりの間隔（秒）を計算
 
-led = LED(25)   # 内蔵 LED
-# led = LED(16) # LED (GPIO 16)
+# led = pico_led   # 内蔵 LED
+led = LED(17) # LED (GPIO 17)
 
 print(f"BPM: {bpm}")               # bpm を表示
 # メインループ: メトロノーム動作

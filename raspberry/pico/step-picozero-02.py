@@ -1,9 +1,10 @@
 from picozero import LED
+from picozero import pico_led
 from time import sleep
 
-# 内蔵LEDを設定
-led = LED(25)  # GPIO 25 は内蔵 LED
-# led = LED(16)  # GPIO 16 は外部接続の LED
+# LEDを設定
+# led = pico_led
+led = LED(17)  # GPIO 17 は外部接続の LED
 
 try:
     while True:
