@@ -1,3 +1,6 @@
+# 配線方法
+# [GPIO 16] --- [ボタン] --- [GND]
+
 """
 クリック判定プログラム
 
@@ -32,8 +35,7 @@ LONG_PRESS_DURATION = 1  # 長押しの判定時間（秒）
 CLICK_INTERVAL = 0.4     # クリック間の最大間隔（秒）
 POLL_INTERVAL = 0.1      # 判定ポーリング間隔（秒）
 
-# ボタンを GPIO16 に接続
-button = Button(16)
+button = Button(16, pull_up=True)  # 内部プルアップ抵抗を有効化
 
 # 状態管理変数
 click_count = 0

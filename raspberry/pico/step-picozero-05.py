@@ -1,8 +1,10 @@
+# 配線方法
+# [GPIO 16] --- [ボタン] --- [GND]
+
 from picozero import Button
 from time import sleep
 
-# ボタンを GPIO16 に接続
-button = Button(16)
+button = Button(16, pull_up=True)  # 内部プルアップ抵抗を有効化
 
 # ボタンが押されたときに呼び出される関数
 def button_pressed():
