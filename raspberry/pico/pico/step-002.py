@@ -1,9 +1,8 @@
 from machine import Pin, PWM
 from time import sleep
 
-led = PWM(Pin(17))   # LED ピンをPWMモードに設定
-# led = PWM(Pin(25))   # for pico 内臓 LED
-# led = PWM('LED')     # for pico w 内臓 led
+# led = PWM(Pin(17))   # LED ピンをPWMモードに設定
+led = PWM(Pin(25))   # for pico 内臓 LED
 
 led.freq(1000)       # PWM の周波数を 1kHz に設定
 

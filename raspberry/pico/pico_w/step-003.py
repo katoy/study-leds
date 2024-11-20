@@ -17,10 +17,10 @@
 # - 内蔵 LED を使った視覚的なリズム表示(GPIO 25)
 # - BOOTSEL ボタンによるテンポ調整機能
 # - デバウンス処理で安定したボタン入力
-from machine import Pin
+
+import machine
 import time
 import bootsel
-from led_control import Pico_LED
 
 def show_change_bmp(bpm):
     print(f"BPM: {bpm}")           # bpm を表示
@@ -34,9 +34,8 @@ def show_change_bmp(bpm):
 bpm = 60                           # 初期 BPM を 60 に設定
 interval = 60 / bpm                # BPM から 1 拍あたりの間隔 (秒) を計算
 
-# 内蔵 LED の設定(
-led = Pico_LED()
-# led = Pin(17, Pin.OUT)
+# 内蔵 LED の設定
+led = machine.Pin('LED', machine.Pin.OUT)
 
 print(f"BPM: {bpm}")               # bpm を表示
 # メインループ: メトロノーム動作
