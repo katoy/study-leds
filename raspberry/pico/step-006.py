@@ -1,6 +1,8 @@
 # 配線方法：
 # [GPIO 17] --- [抵抗] --- (+)LED(-) --- [GND]
 # [GPIO 16] --- [ボタン] --- [GND]
+#
+# 抵抗（330Ω または 1kΩ）
 
 from machine import Pin
 import time
@@ -13,9 +15,9 @@ button = Pin(16, Pin.IN, Pin.PULL_UP)
 
 try:
     while True:
-        if button.value() == 0:  # ボタンが押された場合
-            led_external.toggle()  # LED をトグル
-            time.sleep(0.5)  # ボタンの押しっぱなしによる連続トグルを防止
+        if button.value() == 0:   # ボタンが押された場合
+            led_external.toggle() # LED をトグル
+            time.sleep(0.5)       # ボタンの押しっぱなしによる連続トグルを防止
 
         time.sleep(0.1)  # 無駄なループ負荷を軽減
 

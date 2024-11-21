@@ -1,3 +1,9 @@
+# 配線鳳凰
+# GPIO 17 --- [抵抗] --- (+)LED1(-) --- GND
+# GPIO 18 --- [抵抗] --- (+)LED2(-) --- GND
+#
+# 抵抗（330Ω または 1kΩ）
+
 from machine import Pin, Timer
 import time
 
@@ -19,7 +25,7 @@ def toggle_led2(timer):
 
 # タイマーを使って LED の点滅を設定
 timer1.init(period=500, mode=Timer.PERIODIC, callback=toggle_led1)  # 0.5 秒 (2Hz)
-timer2.init(period=1000, mode=Timer.PERIODIC, callback=toggle_led2)  # 1 秒 (1Hz)
+timer2.init(period=1000, mode=Timer.PERIODIC, callback=toggle_led2) # 1 秒 (1Hz)
 
 try:
     # プログラムが終了しないように無限ループで待機

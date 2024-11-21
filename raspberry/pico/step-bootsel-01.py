@@ -7,6 +7,6 @@ while True:
   if bootsel.pressed():
     print('BOOTSEL pressed')
     while bootsel.pressed():
-      time.sleep(.1)
+      time.sleep(0.1)
     print('BOOTSEL released')
-  time.sleep(.1)
+  time.sleep(0.1)

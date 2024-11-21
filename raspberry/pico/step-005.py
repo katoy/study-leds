@@ -1,3 +1,8 @@
+# 配線鳳凰
+# GPIO 17 --- [抵抗] --- (+)LED1(-) --- GND
+#
+# 抵抗（330Ω または 1kΩ）
+
 from machine import Pin, PWM
 import time
 import math
