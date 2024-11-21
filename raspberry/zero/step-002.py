@@ -1,3 +1,9 @@
+# 配線
+# [GPIO 17 (物理ピン 11)] --- (+)LED(-) --- [330Ω 抵抗] --- [GND (物理ピン 6)]
+#
+# $ sudo pigpiod
+#
+
 from gpiozero import PWMLED
 from time import sleep
 from gpiozero.pins.pigpio import PiGPIOFactory

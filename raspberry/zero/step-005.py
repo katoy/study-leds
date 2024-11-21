@@ -7,7 +7,7 @@ LED Flame Simulation Program
 使い方:
     このプログラムを実行する際に、`--pattern` 引数で使用するパターンを指定してください。
     各パターンは、LED の明るさの変化に異なるアルゴリズムを使用して、炎の揺らぎを表現します。
-    
+
     例:
         python flame_led.py --pattern perlin        # パーリンノイズによる揺らぎ
         python flame_led.py --pattern sine_random   # サイン波 + ランダムノイズの揺らぎ
@@ -25,15 +25,15 @@ LED Flame Simulation Program
     1. パーリンノイズ ('perlin')
        - 自然で滑らかなノイズを生成するパーリンノイズを使用して、ランダム性の中に規則性を持った明るさの揺らぎを再現します。
        - ベースとなる位置を少しずつ変化させることで、炎のゆらめきに似た動きを生み出します。
-    
+
     2. サイン波＋ランダムノイズ ('sine_random')
        - サイン波の周期的な変化にランダムノイズを加えることで、自然な揺らぎを表現します。
        - サイン波による規則的な上下動が基礎となり、ランダムノイズが不規則性を加えるため、炎のリアルな動きを再現します。
-    
+
     3. ランダムウォーク ('random_walk')
        - 前回の明るさにランダムに増減を加える「ランダムウォーク」を使い、炎の不規則なゆらめきを表現します。
        - 直前の明るさから大きく逸脱しないようにして、自然な変化が続くようにしています。
-    
+
     4. 複数サイン波の重ね合わせ ('multi_sine')
        - 異なる周波数と振幅のサイン波を複数重ね合わせて、複雑で有機的な揺らぎを再現します。
        - 追加のランダムノイズを含むことで、豊かな変化がありながらも自然な炎の効果が得られます。
@@ -68,7 +68,7 @@ pwm.start(0)
 
 # 引数の解析
 parser = argparse.ArgumentParser(description="炎の揺らぎパターンを指定します")
-parser.add_argument('--pattern', choices=['perlin', 'sine_random', 'random_walk', 'multi_sine'], 
+parser.add_argument('--pattern', choices=['perlin', 'sine_random', 'random_walk', 'multi_sine'],
                     default='sine_random', help="炎の揺らぎパターンを選択します")
 args = parser.parse_args()
 

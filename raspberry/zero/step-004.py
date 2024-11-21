@@ -1,3 +1,10 @@
+# 配線
+# GPIO 17 --- [アノード (+)]LED[カソード (-)] --- [抵抗] --- GND
+# GPIO 27 --- [アノード (+)]LED[カソード (-)] --- [抵抗] --- GND
+#
+# 抵抗（330Ω ～ 1kΩ)
+#
+
 from gpiozero import LED
 from signal import pause
 from threading import Timer

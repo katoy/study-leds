@@ -1,3 +1,7 @@
+# 配線
+# [GPIO 17 (物理ピン 11)] --- (+)LED(-) --- [330Ω 抵抗] --- [GND (物理ピン 6)]
+#
+
 from gpiozero import LED
 from signal import pause
 from threading import Timer
