@@ -1,3 +1,9 @@
+# 配線
+# GPIO 17 --- [アノード (+)]LED[カソード (-)] --- [抵抗] --- GND
+#
+# 抵抗（330Ω ～ 1kΩ)
+#
+
 from flask import Flask, request, jsonify, render_template
 from gpiozero import LED, CPUTemperature
 
