@@ -26,19 +26,19 @@ import bootsel
 def show_change_bmp(bpm):
     print(f"BPM: {bpm}")           # bpm を表示
     for _ in range(20):
-        led.on()                   # LEDを点灯
-        time.sleep(0.05)           # 0.05秒間点灯
-        led.off()                  # LEDを消灯
-        time.sleep(0.05)           # 0.05秒間消灯
+        led.on()                   # LED を点灯
+        time.sleep(0.05)           # 0.05 秒間点灯
+        led.off()                  # LED を消灯
+        time.sleep(0.05)           # 0.05 秒間消灯
 
 # 初期設定
 bpm = 60                           # 初期 BPM を 60 に設定
 interval = 60 / bpm                # BPM から 1 拍あたりの間隔（秒）を計算
 
 # led = pico_led   # 内蔵 LED
-led = LED(17) # LED (GPIO 17)
+led = LED(17)      # LED (GPIO 17)
 
-print(f"BPM: {bpm}")               # bpm を表示
+print(f"BPM: {bpm}")  # bpm を表示
 # メインループ: メトロノーム動作
 
 try:

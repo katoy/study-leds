@@ -4,26 +4,26 @@
 """
 クリック判定プログラム
 
-このプログラムは、Raspberry Pi Picoに接続されたボタン（GPIO16）を使用して、
-以下の3種類のクリックタイプを判定し、結果を出力します。
+このプログラムは、Raspberry Pi Pico に接続されたボタン (GPIO16) を使用して、
+以下の 3 種類のクリックタイプを判定し、結果を出力します。
 
 1. Single Click (シングルクリック)
-   - ボタンを1回短く押すと判定されます。
+   - ボタンを 1 回短く押すと判定されます。
 2. Double Click (ダブルクリック)
-   - ボタンを短い間隔で2回押すと判定されます。
+   - ボタンを短い間隔で 2 回押すと判定されます。
 3. Long Press (長押し)
-   - ボタンを1秒以上押し続けると判定されます。
+   - ボタンを 1 秒以上押し続けると判定されます。
 
 機能:
-- ボタンの押下と解放をイベントとして処理します（ポーリング不要）。
-- 判定されたクリックタイプを1回だけ出力します。
+- ボタンの押下と解放をイベントとして処理します (ポーリング不要)。
+- 判定されたクリックタイプを 1 回だけ出力します。
 
 使用方法:
-- プログラムをRaspberry Pi Pico上で実行してください。
-- GPIO16ピンにボタンを接続し、片方をGNDに接続します。
+- プログラムを Raspberry Pi Pico 上で実行してください。
+- GPIO16 ピンにボタンを接続し、片方を GND に接続します。
 
 注意:
-- クリック間隔（CLICK_INTERVAL）や長押し判定時間（LONG_PRESS_DURATION）は、
+- クリック間隔 (CLICK_INTERVAL) や長押し判定時間 (LONG_PRESS_DURATION) は、
   必要に応じて調整可能です。
 """
 
@@ -31,9 +31,9 @@ from picozero import Button
 from time import time, sleep
 
 # 定数設定
-LONG_PRESS_DURATION = 1  # 長押しの判定時間（秒）
-CLICK_INTERVAL = 0.4     # クリック間の最大間隔（秒）
-POLL_INTERVAL = 0.1      # 判定ポーリング間隔（秒）
+LONG_PRESS_DURATION = 1  # 長押しの判定時間 (秒)
+CLICK_INTERVAL = 0.4     # クリック間の最大間隔 (秒)
+POLL_INTERVAL = 0.1      # 判定ポーリング間隔 (秒)
 
 button = Button(16, pull_up=True)  # 内部プルアップ抵抗を有効化
 
@@ -96,5 +96,5 @@ button.when_released = handle_release
 # メインループでクリックタイプを管理
 while True:
     determine_click_type()  # クリックタイプを判定
-    print_click_result()  # 判定結果を出力
+    print_click_result()    # 判定結果を出力
     sleep(POLL_INTERVAL)
