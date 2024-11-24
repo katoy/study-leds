@@ -1,5 +1,5 @@
 from picozero import PWMOutputDevice
-from time import sleep, time
+from time import sleep, time  # 明示的に time をインポート
 
 class CuckooSignal:
     """
@@ -12,9 +12,8 @@ class CuckooSignal:
             gpio_pin (int): 接続する GPIO ピン番号
         """
         self.buzzer = PWMOutputDevice(gpio_pin)
-        self.stop_flag = False  # スレッド制御用のフラグ
 
-    def play_tone(self, duration, duty_cycle):
+    def play_tone(self, duration, duty_cycle=0.5):
         """
         指定した時間とデューティ比でブザーを鳴らす。
         Args:
@@ -23,12 +22,12 @@ class CuckooSignal:
         """
         if not (0.0 <= duty_cycle <= 1.0):
             raise ValueError("duty_cycle must be between 0.0 and 1.0")
-        
-        self.buzzer.value = duty_cycle  # デューティ比を設定
-        sleep(duration)
-        self.buzzer.off()
 
-    def cuckoo_sound(self, total_duration=4, duty_cycle=0.5):
+        self.buzzer.value = duty_cycle
+        sleep(duration)
+        self.buzzer.value = 0  # 明示的にブザーを停止
+
+    def cuckoo_sound(self, total_duration, duty_cycle=0.5):
         """
         信号機のカッコー音を再現。
         Args:
@@ -44,26 +43,37 @@ class CuckooSignal:
             self.play_tone(0.5, duty_cycle)
             sleep(0.3)  # 長い間隔
 
-    def run(self, duty_cycle):
-        """
-        カッコー音を繰り返し再生。
-        stop_flag が True になるまで続ける。
-        Args:
-            duty_cycle (float): PWMのデューティ比（0.0～1.0）
-        """
-        while not self.stop_flag:
-            self.cuckoo_sound(duty_cycle)
 
     def stop(self):
         """
-        ブザーを停止し、ループを終了。
+        クラスの動作を停止します。
         """
-        self.stop_flag = True
-        self.buzzer.off()
+        print("終了処理を開始します")
+        
+        # スレッドの停止フラグを設定
+        self.button_thread_running = False
+        
+        # スレッドが停止するのを待機
+        print("ボタン監視スレッドを停止中...")
+        for _ in range(50):  # 最大 5 秒待機 (0.1 秒 × 50 回)
+            time.sleep(0.1)
+            if not self.button_thread_running:
+                break
+        else:
+            print("警告: ボタン監視スレッドが正常に停止しませんでした")
 
+        # 全てのLEDを消灯
+        print("LED をすべて消灯します...")
+        for led in self.leds.values():
+            led.off()
+
+        # ブザーを停止
+        print("ブザーを停止します...")
+        self.cuckoo.stop()
+
+        print("終了処理が完了しました")
 
 # メインプログラム
 if __name__ == "__main__":
     cuckoo = CuckooSignal(gpio_pin=20)
-    cuckoo.cuckoo_sound(duty_cycle=0.5)  # デューティ比 0.5 で再生
-
+    cuckoo.cuckoo_sound(total_duration=4)
