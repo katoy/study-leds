@@ -1,5 +1,5 @@
 from picozero import PWMOutputDevice
-from time import sleep
+from time import sleep, time
 
 class CuckooSignal:
     """
@@ -28,21 +28,21 @@ class CuckooSignal:
         sleep(duration)
         self.buzzer.off()
 
-    def cuckoo_sound(self, duty_cycle=0.5):
+    def cuckoo_sound(self, total_duration=4, duty_cycle=0.5):
         """
-        信号機のカッコー音（ミとソ）を再現。
+        信号機のカッコー音を再現。
         Args:
+            total_duration (float): 全体の再生時間（秒）
             duty_cycle (float): PWMのデューティ比（0.0～1.0）
         """
-        duration = 0.5  # 500 ms
-
-        # ミ（音を出す）
-        self.play_tone(duration, duty_cycle)
-        sleep(0.1)  # 短い間隔
-
-        # ソ（音を出す）
-        self.play_tone(duration, duty_cycle)
-        sleep(0.3)  # 少し長い間隔
+        end_time = time() + total_duration
+        while time() < end_time:
+            # ミ
+            self.play_tone(0.5, duty_cycle)
+            sleep(0.1)  # 短い間隔
+            # ソ
+            self.play_tone(0.5, duty_cycle)
+            sleep(0.3)  # 長い間隔
 
     def run(self, duty_cycle):
         """
