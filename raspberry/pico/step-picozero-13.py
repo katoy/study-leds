@@ -9,7 +9,7 @@ Raspberry Pi Pico の内部温度センサーを使用して CPU 温度を取得
 5. 記録中に `Ctrl+C` を押すと記録を安全に停止。
 """
 
-from picozero import TemperatureSensor
+from picozero import pico_temp_sensor
 from time import sleep, time
 
 
@@ -18,16 +18,15 @@ class CPULogger:
     CPU 温度を取得してファイルに記録するクラス。
     """
 
-    def __init__(self, pin=4, interval=1, duration=60, filename="cpu_temperature_log.txt"):
+    def __init__(self, interval=1, duration=60, filename="cpu_temperature_log.txt"):
         """
         初期化メソッド。
         Args:
-            pin (int): 温度センサーのピン番号（デフォルトは内部温度センサーのピン番号 4）。
             interval (float): サンプリング間隔（秒）。
             duration (float): 総記録時間（秒）。
             filename (str): ログファイルの名前。
         """
-        self.sensor = TemperatureSensor(pin=pin)  # picozero の TemperatureSensor を初期化
+        self.sensor = pico_temp_sensor  # 既存の pico_temp_sensor を利用
         self.interval = interval
         self.duration = duration
         self.filename = filename
@@ -45,7 +44,7 @@ class CPULogger:
                 file.write("Time (s), Temperature (C)\n")  # CSV ヘッダー
                 while self.running and time() - start_time < self.duration:
                     elapsed_time = time() - start_time
-                    temperature = self.sensor.temp  # 温度センサーから温度を取得
+                    temperature = self.sensor.temp  # 温度センサーの値を取得
                     self._log_to_file(file, elapsed_time, temperature)
                     self._log_to_console(elapsed_time, temperature)
                     sleep(self.interval)
@@ -84,12 +83,11 @@ class CPULogger:
 
 
 # 設定
-PIN = 4  # 内部温度センサーのピン
 INTERVAL = 2  # サンプリング間隔（秒）
 DURATION = 60  # 総記録時間（秒）
 
 if __name__ == "__main__":
-    logger = CPULogger(pin=PIN, interval=INTERVAL, duration=DURATION)
+    logger = CPULogger(interval=INTERVAL, duration=DURATION)
 
     try:
         print("CPU 温度の記録を開始します。Ctrl+C で終了します。")
