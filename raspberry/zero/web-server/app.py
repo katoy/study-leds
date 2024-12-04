@@ -10,8 +10,8 @@ from gpiozero import LED, CPUTemperature
 # Flask アプリケーションの初期化
 app = Flask(__name__)
 
-# GPIOピンの設定
-led = LED(17)  # GPIO 17 に接続されたLEDを制御
+# GPIO ピンの設定
+led = LED(17)  # GPIO 17 に接続された LED を制御
 cpu = CPUTemperature()  # CPU 温度を取得するためのオブジェクト
 
 @app.route("/")
@@ -56,7 +56,7 @@ def led_control():
 if __name__ == "__main__":
     try:
         # Flask アプリケーションを起動
-        app.run(host="0.0.0.0", port=5000, debug=True)
+        app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
     except KeyboardInterrupt:
         pass
 
