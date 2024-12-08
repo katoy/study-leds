@@ -9,16 +9,16 @@ potentiometer = Pot(28)
 while True:
     # 電圧を取得 (picozeroのPotクラスは0〜1の値を返す)
     voltage = potentiometer.value * 3.3  # 3.3Vスケールに変換
-    print(voltage)
+    # print(voltage)
 
-    led_0.value = 0
-    led_1.value = 0
-    led_2.value = 0    
-    if voltage < 80:
-        led_0.value = 1
-    elif voltage < 90:
-        led_1.value = 1
+    led_0.off()
+    led_1.off()
+    led_2.off()   
+    if voltage < 1.0:
+        led_0.on()
+    elif 1.0 <= voltage < 2.0:
+        led_1.on()
     else:
-        led_2.value = 1
+        led_2.on()
 
     utime.sleep(0.5)
