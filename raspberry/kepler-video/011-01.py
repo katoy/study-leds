@@ -11,4 +11,3 @@ while True:
     potVal = pot.read_u16()
     led.duty_u16(potVal)
     utime.sleep(0.1)
-

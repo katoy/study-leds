@@ -3,7 +3,7 @@ import utime
 import math
 
 # 定数の設定
-PWM_LED_PIN = 15        # PWM対応LED のピン番号
+PWM_LED_PIN = 15        # PWM 対応 LED のピン番号
 POTENTIOMETER_PIN = 28  # ポテンショメータのピン番号
 C = math.pow(math.pow(2, 16), 1/100)  # 2^16 の 100 乗根
 
