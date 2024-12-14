@@ -57,6 +57,7 @@ repeat_count = 10  # 計測を繰り返す回数
 def benchmark_draw_circle():
     total_time_trig = 0
     total_time_bresenham = 0
+    delta = 5 # 1
 
     for _ in range(repeat_count):
         # 三角関数を使用した描画の計測
@@ -64,7 +65,7 @@ def benchmark_draw_circle():
         display.show()
         
         start_time = utime.ticks_us()
-        for r in range(10, 30, 5):  # 半径 10 から 30 まで 5 刻みで描画
+        for r in range(10, 30, delta):  # 半径 10 から 30 まで delta 刻みで描画
             draw_circle_trig(display, 64, 32, r)
         display.show()
         end_time = utime.ticks_us()
@@ -77,7 +78,7 @@ def benchmark_draw_circle():
         display.show()
 
         start_time = utime.ticks_us()
-        for r in range(10, 30, 5):  # 半径 10 から 30 まで 5 刻みで描画
+        for r in range(10, 30, delta):  # 半径 10 から 30 まで delta 刻みで描画
             draw_circle_bresenham(display, 64, 32, r)
         display.show()
         end_time = utime.ticks_us()
