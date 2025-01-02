@@ -48,7 +48,7 @@ def draw_circle_bresenham(display, cx, cy, radius):
         x += 1
 
 # I2C 初期化 (ピン番号は適切に変更)
-i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=200000)
+i2c = I2C(1, scl=Pin(3), sda=Pin(2), freq=200000)
 display = ssd1306.SSD1306_I2C(128, 64, i2c)
 
 # 繰り返し計測用

@@ -25,7 +25,7 @@ def draw_fig(display, cx, cy, radius, cycle_x, cycle_y, phase_angle):
         display.pixel(x, y, 1)
 
 # I2C 初期化 (ピン番号は適切に変更)
-i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=200000)  # SDA: GPIO0, SCL: GPIO1
+i2c = I2C(1, scl=Pin(3), sda=Pin(2), freq=400000)  # SDA: GPIO2, SCL: GPIO3
 display = ssd1306.SSD1306_I2C(128, 64, i2c)  # 解像度128x64のSSD1306を使用
 
 # 描画の中心座標と半径の設定
