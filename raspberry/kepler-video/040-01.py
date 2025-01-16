@@ -17,8 +17,8 @@ def circle(r, cx, cy, orgx, orgy):
         rad = deg / 360 * 2 * math.pi
         x = r * math.cos(rad)
         y = r * math.sin(rad)
-        disp.pixel(int(cx + x + orgx), int(cy + y + orgy), 1)          
-                     
+        disp.pixel(int(cx + x + orgx), int(cy + y + orgy), 1)
+
 def drow_nav(pitch, roll):
     disp.rect(0, 14, 128, 50, 1)
     disp.hline(0, 39, 128, 1)
@@ -51,11 +51,11 @@ while True:
             rollDeg += 180
         pitchDeg = adjust_angle(pitchDeg)
         rollDeg = adjust_angle(rollDeg)
-    
+
         disp.fill(0)
         message = "P:" + str(round(pitchDeg, 1)) + " R:" + str(round(rollDeg, 1))
         disp.text(message, 0, 0)
         drow_nav(pitchDeg, rollDeg)
         disp.show()
- 
+
     utime.sleep(0.05)
