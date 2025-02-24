@@ -42,11 +42,22 @@ from machine import Pin
 servoPin = Pin(20, Pin.OUT)
 
 angle = 0
-pw = int(angle * 2000 / 180 + 500)
-off_us = 20000 - pw
+pw0 = int(angle * 2000 / 180 + 500)
+off_us0 = 20000 - pw0
+
+angle = 90
+pw90 = int(angle * 2000 / 180 + 500)
+off_us90 = 20000 - pw90
 
 while True:
     servoPin.on()
-    utime.sleep_us(pw)
+    utime.sleep_us(pw0)
     servoPin.off()
-    utime.sleep_us(off_us)
+    utime.sleep_us(off_us0)
+    utime.sleep(2)
+    
+    servoPin.on()
+    utime.sleep_us(pw90)
+    servoPin.off()
+    utime.sleep_us(off_us90)
+    utime.sleep(2)
