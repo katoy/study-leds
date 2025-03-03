@@ -33,7 +33,7 @@ import time
 # クロック周波数の定義 (2MHz)
 CLOCK_FREQ = 2_000_000  # 2MHz
 
-# 定数定義
+# 定数定義 (各値はサイクル数)
 DELAY_TRIGGER = 2000000  # trigger_sm 用：1秒遅延 (2MHzなら約2000000サイクル)
 DELAY_BLINK   = 200000   # blink_sm 用：0.1秒遅延 (2MHzなら約200000サイクル)
 
@@ -66,7 +66,7 @@ def blink():
     wait(1, irq, 0)       # trigger_sm からの IRQ0 を待機
     set(pins, 1) .side(1)  # LED を ON にする
     pull()                # FIFO から 32bit 値（blink delay）を取得
-    mov(x, osr)
+    mov(x, osr)           # x にロード
     label("blink_delay")
     jmp(x_dec, "blink_delay")  # x が 0 になるまでループ（約0.1秒の遅延）
     set(pins, 0) .side(0)  # LED を OFF にする
@@ -90,7 +90,8 @@ blink_sm.put(DELAY_BLINK)
 # ---------------------------------------------------------
 try:
     while True:
-        time.sleep(1)  # 1秒待機
+        # sleep 時間は DELAY_TRIGGER / CLOCK_FREQ (＝1秒) と等価
+        time.sleep(DELAY_TRIGGER / CLOCK_FREQ)
         trigger_sm.put(DELAY_TRIGGER)
         blink_sm.put(DELAY_BLINK)
 except KeyboardInterrupt:
