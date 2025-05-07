@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Raspberry Pi Pico W LED 制御</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 400px;
+      margin: 2em auto;
+      text-align: center;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.8em 1.2em;
+      font-size: 1em;
+    }
+    #controls {
+      margin-top: 1em;
+    }
+    #status {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>LED 制御デモ</h1>
+
+  <button id="connectBtn">接続</button>
+  <button id="disconnectBtn" hidden>切断</button>
+
+  <div id="controls" hidden>
+    <button id="ledOnBtn">LED ON</button>
+    <button id="ledOffBtn">LED OFF</button>
+  </div>
+
+  <p id="status">切断中</p>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const CONFIG = {
+        DEVICE_NAME: 'LED-test',
+        SERVICE_UUID: 0x181A,
+        CHARACTERISTIC_UUID: 0x2ABF
+      };
+
+      const ELEMENTS = {
+        connectBtn: document.getElementById('connectBtn'),
+        disconnectBtn: document.getElementById('disconnectBtn'),
+        controls: document.getElementById('controls'),
+        ledOnBtn: document.getElementById('ledOnBtn'),
+        ledOffBtn: document.getElementById('ledOffBtn'),
+        status: document.getElementById('status')
+      };
+
+      let device = null;
+      let characteristic = null;
+
+      const updateUI = (connected) => {
+        ELEMENTS.connectBtn.hidden = connected;
+        ELEMENTS.disconnectBtn.hidden = !connected;
+        ELEMENTS.controls.hidden = !connected;
+        ELEMENTS.status.textContent = connected ? '接続中' : '切断中';
+      };
+
+      const onDisconnected = () => {
+        characteristic = null;
+        device = null;
+        updateUI(false);
+      };
+
+      const connectPico = async () => {
+        try {
+          device = await navigator.bluetooth.requestDevice({
+            filters: [{ name: CONFIG.DEVICE_NAME }],
+            optionalServices: [CONFIG.SERVICE_UUID]
+          });
+          const server = await device.gatt.connect();
+          const service = await server.getPrimaryService(CONFIG.SERVICE_UUID);
+          characteristic = await service.getCharacteristic(CONFIG.CHARACTERISTIC_UUID);
+          device.addEventListener('gattserverdisconnected', onDisconnected);
+          updateUI(true);
+        } catch (err) {
+          console.error('接続エラー:', err);
+          alert(`接続失敗: ${err.message}`);
+        }
+      };
+
+      const disconnectPico = () => {
+        if (device?.gatt.connected) {
+          device.gatt.disconnect();
+        }
+      };
+
+      const writeLED = async (value) => {
+        if (!characteristic) {
+          alert('未接続です');
+          return;
+        }
+        try {
+          await characteristic.writeValue(new Uint8Array([value]));
+          console.log(`LED: ${value}`);
+        } catch (err) {
+          console.error('書き込みエラー:', err);
+          alert(`書き込み失敗: ${err.message}`);
+        }
+      };
+
+      ELEMENTS.connectBtn.addEventListener('click', connectPico);
+      ELEMENTS.disconnectBtn.addEventListener('click', disconnectPico);
+      ELEMENTS.ledOnBtn.addEventListener('click', () => writeLED(1));
+      ELEMENTS.ledOffBtn.addEventListener('click', () => writeLED(0));
+
+      updateUI(false);
+    });
+  </script>
+</body>
+</html>

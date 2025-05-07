@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Raspberry Pi Pico W LED 制御</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 400px;
+      margin: 2em auto;
+      text-align: center;
+    }
+    button {
+      margin: 0.5em;
+      padding: 0.8em 1.2em;
+      font-size: 1em;
+    }
+    #controls {
+      margin-top: 1em;
+    }
+    #status {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>LED 制御デモ</h1>
+
+  <button id="connectBtn">接続</button>
+  <button id="disconnectBtn" hidden>切断</button>
+
+  <div id="controls" hidden>
+    <button id="ledOnBtn">LED ON</button>
+    <button id="ledOffBtn">LED OFF</button>
+  </div>
+
+  <p id="status">切断中</p>
+
+  <!-- モジュール化したJSを読み込み -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

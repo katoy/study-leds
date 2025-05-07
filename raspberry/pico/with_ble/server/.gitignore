@@ -1,0 +1,33 @@
+# Node modules
+
+node\_modules/
+
+# Jest coverage output
+
+coverage/
+
+# Logs
+
+npm-debug.log\*
+
+# Yarn logs
+
+yarn-debug.log\*
+yarn-error.log\*
+
+# MacOS
+
+.DS\_Store
+
+# Environment variables
+
+.env
+
+# Editor directories and files
+
+.vscode/
+.idea/
+
+# Lock files (if you prefer regenerating rather than committing)
+
+# package-lock.json
