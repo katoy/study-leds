@@ -61,11 +61,8 @@ export async function writeLED(char, value) {
   await char.writeValue(new Uint8Array([value]));
 }
 
-// 初期化
-export function initApp() {
-  const elems = getElements();
-  updateUI(elems, false);
-
+// イベントリスナー設定
+export function setEventListeners(elems) {
   elems.connectBtn.addEventListener('click', async () => {
     try {
       const { device, char } = await connectPico(elems);
@@ -85,5 +82,16 @@ export function initApp() {
   elems.ledOffBtn.addEventListener('click', () => writeLED(window._bleChar, 0).catch(e => alert(e.message)));
 }
 
+// 初期化
+export function initApp() {
+  const elems = getElements();
+  updateUI(elems, false);
+  setEventListeners(elems);
+}
+
 // DOM読み込み後に初期化
-window.addEventListener('DOMContentLoaded', initApp);
+// テスト対象から除外
+/* istanbul ignore next */
+if (!window._test) {
+  window.addEventListener('DOMContentLoaded', initApp);
+}
