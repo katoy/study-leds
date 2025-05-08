@@ -27,7 +27,7 @@ export function updateUI(elements, connected) {
 }
 
 // デバイス接続処理
-export async function connectPico(elements) {
+export let connectPico = async (elements) => {
   const { DEVICE_NAME, SERVICE_UUID, CHARACTERISTIC_UUID } = CONFIG;
   try {
     const device = await navigator.bluetooth.requestDevice({
@@ -62,24 +62,26 @@ export async function writeLED(char, value) {
 }
 
 // イベントリスナー設定
+import * as app from './app.js';
+
 export function setEventListeners(elems) {
   elems.connectBtn.addEventListener('click', async () => {
     try {
-      const { device, char } = await connectPico(elems);
+      const { device, char } = await app.connectPico(elems);
       // 接続成功後に char を保持
       window._bleDevice = device;
       window._bleChar   = char;
     } catch (e) {
-      alert(e.message);
+      console.log(e.message);
     }
   });
 
   elems.disconnectBtn.addEventListener('click', () => {
-    disconnectPico(window._bleDevice);
+    app.disconnectPico(window._bleDevice);
   });
 
-  elems.ledOnBtn.addEventListener('click', () => writeLED(window._bleChar, 1).catch(e => alert(e.message)));
-  elems.ledOffBtn.addEventListener('click', () => writeLED(window._bleChar, 0).catch(e => alert(e.message)));
+  elems.ledOnBtn.addEventListener('click', () => app.writeLED(window._bleChar, 1).catch(e => console.log(e.message)));
+  elems.ledOffBtn.addEventListener('click', () => app.writeLED(window._bleChar, 0).catch(e => console.log(e.message)));
 }
 
 // 初期化

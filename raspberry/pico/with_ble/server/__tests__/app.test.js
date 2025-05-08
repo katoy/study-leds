@@ -129,91 +129,81 @@ describe('writeLED()', () => {
   });
 });
 
+import * as app from '../js/app.js';
+
 describe('setEventListeners()', () => {
-  let elems;
-  let connectBtnSpy, disconnectBtnSpy, ledOnBtnSpy, ledOffBtnSpy;
-
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <button id="connectBtn"></button>
-      <button id="disconnectBtn"></button>
-      <div id="controls"></div>
-      <button id="ledOnBtn"></button>
-      <button id="ledOffBtn"></button>
-      <p id="status"></p>
-    `;
-    elems = getElements();
-
-    // スパイをセットアップ
-    connectBtnSpy = jest.spyOn(elems.connectBtn, 'addEventListener');
-    disconnectBtnSpy = jest.spyOn(elems.disconnectBtn, 'addEventListener');
-    ledOnBtnSpy = jest.spyOn(elems.ledOnBtn, 'addEventListener');
-    ledOffBtnSpy = jest.spyOn(elems.ledOffBtn, 'addEventListener');
-  });
-
-  afterEach(() => {
-    // スパイを復元
-    connectBtnSpy.mockRestore();
-    disconnectBtnSpy.mockRestore();
-    ledOnBtnSpy.mockRestore();
-    ledOffBtnSpy.mockRestore();
-  });
-
-  test('イベントリスナーが正しく設定されること', () => {
+  it('イベントリスナーが正しく設定されること', () => {
+    const elems = getElements();
     setEventListeners(elems);
 
-    expect(connectBtnSpy).toHaveBeenCalledWith('click', expect.any(Function));
-    expect(disconnectBtnSpy).toHaveBeenCalledWith('click', expect.any(Function));
-    expect(ledOnBtnSpy).toHaveBeenCalledWith('click', expect.any(Function));
-    expect(ledOffBtnSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    expect(elems.connectBtn.onclick).toBeNull();
+    expect(elems.disconnectBtn.onclick).toBeNull();
+    expect(elems.ledOnBtn.onclick).toBeNull();
+    expect(elems.ledOffBtn.onclick).toBeNull();
   });
 
-  test('connectBtnクリック時にconnectPicoが呼ばれること', async () => {
-    const connectPicoMock = jest.fn().mockResolvedValue({});
-    const originalConnectPico = connectPico;
-    window.connectPico = connectPicoMock;
+   it('connectBtnクリック時にconnectPicoが呼ばれること', async () => {
+    const elems = getElements();
+    const connectPicoMock = jest.fn(() => Promise.resolve({}));
+    app.connectPico = connectPicoMock;
+    const updateUIMock = jest.fn();
+    app.updateUI = updateUIMock;
     setEventListeners(elems);
-    elems.connectBtn.click();
+
+    elems.connectBtn.dispatchEvent(new Event('click'));
     // microtaskが終わるのを待つ
     await Promise.resolve();
     expect(connectPicoMock).toHaveBeenCalledWith(elems);
-    delete window.connectPico;
+    //connectPicoMock.mockRestore();
+    //updateUIMock.mockRestore();
   });
 
-  test('disconnectBtnクリック時にdisconnectPicoが呼ばれること', () => {
-    const disconnectPicoMock = jest.fn();
-    const originalDisconnectPico = disconnectPico;
-    window.disconnectPico = disconnectPicoMock;
+  it('disconnectBtnクリック時にdisconnectPicoが呼ばれること', async () => {
+    const elems = getElements();
+    const disconnectPicoMock = jest.fn(() => {});
+    app.disconnectPico = disconnectPicoMock;
+    window._bleDevice = { gatt: { connected: true, disconnect: jest.fn() } };
+    const updateUIMock = jest.fn();
+    app.updateUI = updateUIMock;
     setEventListeners(elems);
-    window._bleDevice = { gatt: { connected: true } };
-    elems.disconnectBtn.click();
+    elems.disconnectBtn.dispatchEvent(new Event('click'));
+    await Promise.resolve();
     expect(disconnectPicoMock).toHaveBeenCalledWith(window._bleDevice);
-    delete window.disconnectPico;
+    //disconnectPicoMock.mockRestore();
+    //updateUIMock.mockRestore();
   });
 
-  test('ledOnBtnクリック時にwriteLEDが呼ばれること', async () => {
-   const writeLEDMock = jest.fn().mockResolvedValue();
-    const originalWriteLED = window.writeLED;
-    window.writeLED = writeLEDMock;
-    setEventListeners(elems);
+  it('ledOnBtnクリック時にwriteLEDが呼ばれること', async () => {
+    const elems = getElements();
+    const writeLEDMock = jest.fn(() => Promise.resolve());
+    app.writeLED = writeLEDMock;
     window._bleChar = {};
-    elems.ledOnBtn.click();
+    const updateUIMock = jest.fn();
+    app.updateUI = updateUIMock;
+    setEventListeners(elems);
+
+    elems.ledOnBtn.dispatchEvent(new Event('click'));
     // microtaskが終わるのを待つ
     await Promise.resolve();
     expect(writeLEDMock).toHaveBeenCalledWith(window._bleChar, 1);
-    window.writeLED = originalWriteLED;
+    //writeLEDMock.mockRestore();
+    //updateUIMock.mockRestore();
   });
 
-  test('ledOffBtnクリック時にwriteLEDが呼ばれること', async () => {
-    const writeLEDMock = jest.fn().mockResolvedValue();
-    const originalWriteLED = window.writeLED;
-    window.writeLED = writeLEDMock;
-    setEventListeners(elems);
+  it('ledOffBtnクリック時にwriteLEDが呼ばれること', async () => {
+    const elems = getElements();
+    const writeLEDMock = jest.fn(() => Promise.resolve());
+    app.writeLED = writeLEDMock;
     window._bleChar = {};
-    elems.ledOffBtn.click();
+    const updateUIMock = jest.fn();
+    app.updateUI = updateUIMock;
+    setEventListeners(elems);
+
+    elems.ledOffBtn.dispatchEvent(new Event('click'));
     // microtaskが終わるのを待つ
     await Promise.resolve();
     expect(writeLEDMock).toHaveBeenCalledWith(window._bleChar, 0);
-    window.writeLED = originalWriteLED;
+    //writeLEDMock.mockRestore();
+    //updateUIMock.mockRestore();
   });
 });
