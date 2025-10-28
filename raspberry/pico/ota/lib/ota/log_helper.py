@@ -20,7 +20,7 @@ class LogHelper:
             headers = {'Content-Type': 'application/json'}
             urequests.post(url, data=ujson.dumps(payload), headers=headers)
         except Exception as e:
-            print(f"[OTA] (send_log failed) {e} url={self.server_url}")
+            print(f"[OTA] (send_log failed) {e} url={url}")
 
     def append_debug(self, filename, text, max_bytes=16*1024):
         """

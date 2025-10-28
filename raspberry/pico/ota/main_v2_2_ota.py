@@ -14,7 +14,7 @@ class SimpleLEDControllerOTA(OTAEnabledApp):
     def __init__(self):
         super().__init__(
             app_name="Simple LED Controller",
-            version="v2.2.0-ota"
+            version="2.2.0"
         )
         self.led = Pin('LED', Pin.OUT)
         self.timer = Timer()

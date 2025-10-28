@@ -44,6 +44,12 @@ class OTAEnabledApp:
         """アプリケーションのメインループ"""
         self.running = True
         self.ota.connect_wifi()
+
+        # アプリケーションの現在のバージョンを記録
+        current_local_version = self.ota.get_current_version()
+        if self.version != current_local_version:
+            self.ota.set_current_version(self.version)
+
         self.ota.check_and_update()
         self.setup()
         while self.running:

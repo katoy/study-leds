@@ -22,6 +22,14 @@ class OTAManager:
         self.gc = gc_mod if gc_mod else __import__('gc')
         self.os = os_mod if os_mod else __import__('os')
 
+        # --- WiFiインターフェース強制リセット ---
+        try:
+            wlan = self.network.WLAN(self.network.STA_IF)
+            wlan.active(False)
+            self.time.sleep(1)
+            wlan.active(True)
+        except Exception:
+            pass
         self.wlan = self.network.WLAN(self.network.STA_IF)
         self.last_check_time = 0
         self.wifi_connected = False
@@ -99,83 +107,132 @@ class OTAManager:
             # 念のため例外もraise（boot.py等の上位で再起動ロジックがある場合）
             raise RuntimeError("WiFi接続に失敗しました")
 
+    def get_current_version(self):
+        """ローカルのバージョンファイルから現在のバージョンを読み込む"""
+        try:
+            with open(self.version_file, 'r') as f:
+                return f.read().strip()
+        except Exception:
+            return "0.0.0"
+
+    def set_current_version(self, version):
+        """ローカルのバージョンファイルに現在のバージョンを書き込む"""
+        with open(self.version_file, 'w') as f:
+            f.write(version)
+
+    def _ensure_dirs(self, file_path):
+        if '/' in file_path:
+            parts = file_path.split('/')[:-1]
+            path = ''
+            for i, part in enumerate(parts):
+                path = '/'.join(parts[:i+1])
+                try:
+                    self.os.mkdir(path)
+                except OSError as e:
+                    if e.args[0] != 17: # EEXIST
+                        raise
+
+    def download_file(self, url, dest_path):
+        """ファイルをダウンロードして指定されたパスに保存する"""
+        self.gc.collect()
+        self._ensure_dirs(dest_path)
+        try:
+            resp = self.urequests.get(url)
+            if resp.status_code == 200:
+                # メモリ節約のため、チャンクで書き込む
+                buf = bytearray(256)
+                with open(dest_path, 'wb') as f:
+                    while True:
+                        size = resp.raw.readinto(buf)
+                        if size == 0:
+                            break
+                        f.write(buf, size)
+                return True
+            else:
+                print(f"[OTA] ERROR: Download failed (status={resp.status_code}) url={url} dest={dest_path}")
+                self.log.send_log(f"[OTA] ERROR: Download failed (status={resp.status_code}) url={url} dest={dest_path}")
+                return False
+        except Exception as e:
+            print(f"[OTA] EXCEPTION: Download failed url={url} dest={dest_path} error={e}")
+            self.log.send_log(f"[OTA] EXCEPTION: Download failed url={url} dest={dest_path} error={e}")
+            return False
+        finally:
+            if 'resp' in locals() and resp:
+                resp.close()
+
     def check_and_update(self):
         """
-        単発でアップデートチェックを行う（簡易実装）。
-        サーバーの versions.json を取得してログ出力する（ダウンロードや置換は実装していない）。
+        サーバーと通信してOTAアップデートを実行する。
         """
+        self.gc.collect()
         msg = "[OTA] check_and_update: start"
         print(msg)
-        # send_log は WiFi 接続後にのみ実行される仕様のため、ここでは print + send_log を行う
-        try:
-            self.log.send_log(msg)
-        except Exception:
-            # ログ送信失敗は致命的でないため無視
-            pass
+        self.log.send_log(msg)
+
+        current_version = self.get_current_version()
+        msg = f"[OTA] Current version: {current_version}"
+        print(msg)
+        self.log.send_log(msg)
 
         try:
             url = self.server_url.rstrip('/') + '/versions.json'
-            resp = None
-            try:
-                resp = self.urequests.get(url)
-                status = getattr(resp, 'status_code', None)
-                if status == 200 or status is None:
-                    body = getattr(resp, 'text', None)
-                    if body is None:
-                        try:
-                            body = resp.content
-                        except Exception:
-                            body = None
-                    if body:
-                        try:
-                            data = self.ujson.loads(body)
-                            msg = f"[OTA] remote version: {data.get('version')}"
-                            print(msg)
-                            try:
-                                self.log.send_log(msg)
-                            except Exception:
-                                pass
-                        except Exception as e_json:
-                            msg = f"[OTA] JSON parse error: {e_json}"
-                            print(msg)
-                            try:
-                                self.log.send_log(msg)
-                            except Exception:
-                                pass
-                else:
-                    msg = f"[OTA] Failed to fetch versions.json (status={status})"
-                    print(msg)
-                    try:
-                        self.log.send_log(msg)
-                    except Exception:
-                        pass
-            except Exception as e_req:
-                msg = f"[OTA] request error: {e_req}"
+            resp = self.urequests.get(url)
+            if resp.status_code == 200:
+                data = resp.json()
+                remote_version = data.get('version')
+                msg = f"[OTA] Remote version: {remote_version}"
                 print(msg)
-                try:
+                self.log.send_log(msg)
+
+                if remote_version and remote_version != current_version:
+                    msg = "[OTA] New version found, starting update..."
+                    print(msg)
                     self.log.send_log(msg)
-                except Exception:
-                    pass
-            finally:
-                try:
-                    if resp:
-                        resp.close()
-                except Exception:
-                    pass
+
+                    files_to_update = data.get('files', [])
+                    for file_info in files_to_update:
+                        file_url = file_info['url']
+                        dest_path = file_info['name']
+                        msg = f"[OTA] Downloading {file_url} to {dest_path}"
+                        print(msg)
+                        self.log.send_log(msg)
+                        self.gc.collect()
+                        if self.download_file(file_url, dest_path):
+                            msg = f"[OTA] Downloaded {dest_path}"
+                            print(msg)
+                            self.log.send_log(msg)
+                        else:
+                            msg = f"[OTA] Failed to download {dest_path}"
+                            print(msg)
+                            self.log.send_log(msg)
+                            # エラー処理: アップデートを中止
+                            return False
+
+                    self.set_current_version(remote_version)
+                    msg = f"[OTA] Update complete. New version: {remote_version}"
+                    print(msg)
+                    self.log.send_log(msg)
+
+                    if self.auto_reboot:
+                        msg = "[OTA] Rebooting..."
+                        print(msg)
+                        self.log.send_log(msg)
+                        self.machine.reset()
+            else:
+                msg = f"[OTA] Failed to fetch versions.json (status={resp.status_code})"
+                print(msg)
+                self.log.send_log(msg)
         except Exception as e:
             msg = f"[OTA] check_and_update exception: {e}"
             print(msg)
-            try:
-                self.log.send_log(msg)
-            except Exception:
-                pass
+            self.log.send_log(msg)
+        finally:
+            if 'resp' in locals() and resp:
+                resp.close()
 
         msg = "[OTA] check_and_update: done"
         print(msg)
-        try:
-            self.log.send_log(msg)
-        except Exception:
-            pass
+        self.log.send_log(msg)
         return False
 
     def periodic_check(self):
