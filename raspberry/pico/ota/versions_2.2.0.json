@@ -1,0 +1,10 @@
+{
+  "version": "2.2.0",
+  "files": [
+    {"name": "main.py", "url": "http://192.168.0.104:8080/main_v2_2_ota.py"},
+    {"name": "lib/ota/log_helper.py", "url": "http://192.168.0.104:8080/lib/ota/log_helper.py"},
+    {"name": "lib/ota/ota_manager.py", "url": "http://192.168.0.104:8080/lib/ota/ota_manager.py"},
+    {"name": "lib/ota/ota_enabled_app.py", "url": "http://192.168.0.104:8080/lib/ota/ota_enabled_app.py"},
+    {"name": "config.py", "url": "http://192.168.0.104:8080/config.py"}
+  ]
+}

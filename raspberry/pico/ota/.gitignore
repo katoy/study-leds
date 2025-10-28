@@ -1,0 +1,71 @@
+# Raspberry Pi Pico OTA Project .gitignore
+
+# 設定ファイル（個人情報を含むため）
+config.py
+
+# バージョンファイル
+version.txt
+versions.json
+
+# Python キャッシュ
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 仮想環境
+venv/
+env/
+ENV/
+
+# IDE設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Thumbnails
+Thumbs.db
+ehthumbs.db
+
+# ログファイル
+*.log
+
+# 一時ファイル
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# HTTPサーバーのログ
+access.log
+error.log
+
+# mpremoteの一時ファイル
+.mpremote_*
+
+# 開発用テストファイル
+test_*.py
+*_test.py
+
+# ドキュメント生成
+docs/_build/
+site/
+
+# 環境変数ファイル
+.env
+.env.local
+.env.production
+
+# デバイス固有のファイル
+device_info.txt
+serial_output.txt

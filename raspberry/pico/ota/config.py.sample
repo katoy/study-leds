@@ -1,0 +1,62 @@
+# OTA設定ファイル - サンプル
+# このファイルをconfig.pyにコピーして、実際の環境に合わせて変更してください
+#
+# 注意: setup.shを実行すると、自動的にv2.1.0（OTA対応版）がデフォルトに設定されます
+
+# WiFi設定
+# あなたのWiFiネットワーク名（SSID）
+WIFI_SSID = "your_wifi_name"
+
+# あなたのWiFiパスワード
+WIFI_PASSWORD = "your_wifi_password"
+
+# サーバー設定
+# MacのIPアドレスを設定してください
+# IPアドレスの確認方法:
+# 1. ターミナルで `./get_ip.sh` を実行
+# 2. または `ifconfig en0 | grep inet` を実行
+# 3. Wi-Fi接続の場合は通常 192.168.x.x の形式
+
+UPDATE_SERVER_IP = "192.168.0.100"  # ← ここを実際のMacのIPアドレスに変更
+UPDATE_SERVER_PORT = 8080
+UPDATE_SERVER_URL = f"http://{UPDATE_SERVER_IP}:{UPDATE_SERVER_PORT}"
+
+# 便利な別名（両方の形式をサポート）
+UPDATE_SERVER_URL = UPDATE_SERVER_URL  # OTAEnabledApp用
+
+# 更新チェック設定
+UPDATE_CHECK_INTERVAL = 15  # 秒単位（15秒ごとに更新をチェック）
+
+# システム設定
+VERSION_FILE = "version.txt"  # ローカルバージョン情報を保存するファイル
+
+# デバッグ設定
+DEBUG_MODE = False  # Trueにすると詳細なログが出力されます
+VERBOSE_OUTPUT = True  # 詳細な実行ログを表示
+
+# タイムアウト設定
+WIFI_CONNECT_TIMEOUT = 20  # WiFi接続のタイムアウト（秒）
+HTTP_REQUEST_TIMEOUT = 10  # HTTP要求のタイムアウト（秒）
+
+# セキュリティ設定
+ALLOW_DOWNGRADE = False  # 古いバージョンへのダウングレードを許可するか
+
+# --- 設定例 ---
+# 一般的な設定例を以下に示します:
+
+# 家庭のWiFi例:
+# WIFI_SSID = "MyHomeWiFi"
+# WIFI_PASSWORD = "MySecurePassword123"
+# UPDATE_SERVER_IP = "192.168.1.100"
+
+# オフィスのWiFi例:
+# WIFI_SSID = "OfficeNetwork"
+# WIFI_PASSWORD = "OfficePass2024"
+# UPDATE_SERVER_IP = "192.168.10.50"
+
+# 開発環境例:
+# WIFI_SSID = "DevNetwork"
+# WIFI_PASSWORD = "dev123"
+# UPDATE_SERVER_IP = "192.168.0.104"
+# DEBUG_MODE = True
+# UPDATE_CHECK_INTERVAL = 10  # より頻繁にチェック
